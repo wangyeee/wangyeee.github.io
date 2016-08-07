@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>Miniature UAV Hardware Development</title>
+  </head>
+  <body>
+    <h1 align="center">Miniature UAV Hardware Development</h1>
+    <p>There are a couple of reasons that existing open source hardware of miniature UAV(or drone) don't meet your requirements. For example, the onboard buck convertor only works with LiPo batteries up to 4s(16.8v). And you want to put it on a large quad with 6s battery. Or you simply want to make contributions back to the original project, e.g. replace some parts with new ones which have either better or lower price or even both! In both cases you need to know something with hardware before going in the HARD way.</p>
+    <h2>Preparation</h2>
+    <p>I assume that you have basic skills, e.g. reference a datasheet to learn about how to use a component. Otherwise you won't be thinking about making your own hardware. Here is a list of skills useful.</p>
+    <ul>
+      <li>Fundamental knowledge of electronics.</li>
+      <li>Electrical prototyping - This includes PCB schematics/layout, etc.</li>
+      <li>SMD soldering.</li>
+      <li>Programming - Sometimes software needs to be changed alone with hardware.</li>
+      <li>Usage of test equipments. A digital multimeter(DMM) is a good start.</li>
+    </ul>
+    <p>Note that it's perfectly fine to start with elementary level of those skills mentioned above, as long as you keep learning. I struggled to solder a SOIC 8 package when I started to build my own hardware, and now I'm able to solder QFN packages with stencil and solder paste.</p>
+    <h2>Electronics used in a drone</h2>
+    <p>The complexity of drones is far beyond the classic RC air planes. Besides RC gear and ESC, an autopilot with several accessories are installed. The following table summarizes common electronics used on a drone.</p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Purpose</th>
+          <th>Skill Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Autopilot</td>
+          <td>Control the drone</td>
+          <td>Competent. To design an autopilot, you need to
+            <ul>
+              <li>Be familiar with MCU, IMU sensors</li>
+              <li>Understand the usages of common components like transistors, 74 logic chips, etc.</li>
+              <li>Layout PCB with SMD parts.</li>
+              <li>Solder components to your board. This is challenge when you intend to design your own IMU, as most sensors used are in QFN packages. They are tricky to solder.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>RC gear</td>
+          <td>Communition between a drone and its operators.</td>
+          <td>Experienced as it will require working with RF circuits.</td>
+        </tr>
+        <tr>
+          <td>ESC/Servo</td>
+          <td>Control speed/torque of a motor</td>
+          <td>Experienced. You need to be able to
+            <ul>
+              <li>Work with high current, e.g. up to 100A for large heli.</li>
+              <li>Use oscilloscope and programmable DC power supply during debug.</li>
+              <li>Write complex control software for ESCs.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Others</td>
+          <td>All other electronics, such as battery regulators, hubs, onboard payloads, etc.</td>
+          <td>Generally basic skills needed, depends on the specific hardware.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>DIY Accessories</h2>
+    <p>Since making accessory like a hub which simplifies the wiring is much easier that disign an autopilot. It's good to get started with that. Here I take my <a href="https://github.com/wangyeee/MiscHardware/tree/master/MultiRotorHub" target="_blank">Multi rotor Hub</a> project as an example to show you how simple it is!</p>
+    <h3>Example: Multi rotor Hub</h3>
+    <h4>The Problem</h4>
+    <p>I have a small 360mm quadcopter with 16mm CF tubes, 2212 motors and 8 inches props. As its internal space is very limited, the wiring becomes quite challenging. Improperly routed wires will end up build a bird nest inside. Another problem is that unlike some larger frame(>500mm) which you can have clean and tidy wires by simply triming excessive wires. It becomes very difficult to assemble the electronics in such tiny space for this frame.</p>
+    <h4>The Solution</h4>
+    <p>There is space of 50x50x20mm between the two central plates. So I deside to make a PCB to route all the wires. I also want to use this with other drones, thus I designed the following features.
+      <ul>
+        <li>50x50mm dimension, M3 mounting holes with 45mm distance. Not only does the upper plate have 45mm mounting holes, this pattern is also the de facto mounting standard in the hobby drone world.</li>
+        <li>Onboard buck converter supports up to 8s LiPo battery and 5V/3A output. The current installation is 3s, since I want to use it on larger platform, I choose TPS5430 which can handle input voltage up to 36V.</li>
+        <li>8 channel PWM ports.</li>
+        <li>LED driver, it shares input signal with M7 and M8.</li>
+        <li>4-pin connector for telemetry/OSD.</li>
+        <li>Onboard voltage divider for batter monitoring.</li>
+      </ul>
+    </p>
+    <h4>The Design</h4>
+    <p>The buck convertor is most complex part of this design. It includes choosing the correct parts(inductors, capacitors, diode, etc.), and PCB layout. The calculation of buck convertor is not an easy task even with detailed paramaters on the TPS5430 datasheet. So here comes the tip: look for application circuits in the datasheet first. In the case of TPS5430, I'm lucky to find an application circuit with 10 to 35V input and 5V output. And there is also recommanded PCB layout in the datasheet which is also very helpful.</p>
+    <p>
+      <!-- <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> -->
+      <br />
+      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 License</a>
+    </p>
+  </body>
+</html>
